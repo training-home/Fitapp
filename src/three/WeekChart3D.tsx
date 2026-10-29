@@ -1,7 +1,7 @@
 import { useFrame } from '@react-three/fiber/native';
 import { useRef } from 'react';
 import { Mesh } from 'three';
-import { DayStat } from '../data';
+import { DayStat } from '../data/week';
 import { colors } from '../theme';
 
 const MAX_HEIGHT = 2.6;

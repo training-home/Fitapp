@@ -1,7 +1,15 @@
 import { useFrame } from '@react-three/fiber/native';
 import { useRef } from 'react';
 import { Mesh, TorusGeometry } from 'three';
-import { Goal } from '../data';
+
+export type Goal = {
+  key: string;
+  label: string;
+  unit: string;
+  value: number;
+  target: number;
+  color: string;
+};
 
 const TUBE = 0.16;
 
@@ -18,7 +26,7 @@ function Ring({ radius, goal, depth }: { radius: number; goal: Goal; depth: numb
     shown.current = next;
     const angle = Math.max(next, 0.001) * Math.PI * 2;
     arc.current.geometry.dispose();
-    arc.current.geometry = new TorusGeometry(radius, TUBE, 16, 96, angle);
+    arc.current.geometry = new TorusGeometry(radius, TUBE, 20, 160, angle);
     cap.current.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius, 0);
   });
 
@@ -26,15 +34,15 @@ function Ring({ radius, goal, depth }: { radius: number; goal: Goal; depth: numb
     // Start at 12 o'clock and run clockwise, like a watch face.
     <group position={[0, 0, depth]} rotation={[0, Math.PI, Math.PI / 2]}>
       <mesh>
-        <torusGeometry args={[radius, TUBE * 0.9, 12, 96]} />
-        <meshStandardMaterial color={goal.color} transparent opacity={0.15} />
+        <torusGeometry args={[radius, TUBE * 0.9, 16, 160]} />
+        <meshStandardMaterial color={goal.color} transparent opacity={0.18} />
       </mesh>
       <mesh ref={arc}>
-        <torusGeometry args={[radius, TUBE, 16, 96, 0.001]} />
+        <torusGeometry args={[radius, TUBE, 20, 160, 0.001]} />
         <meshStandardMaterial color={goal.color} emissive={goal.color} emissiveIntensity={0.6} roughness={0.3} metalness={0.4} />
       </mesh>
       <mesh ref={cap} position={[radius, 0, 0]}>
-        <sphereGeometry args={[TUBE * 1.15, 16, 16]} />
+        <sphereGeometry args={[TUBE * 1.15, 20, 20]} />
         <meshStandardMaterial color="#ffffff" emissive={goal.color} emissiveIntensity={1} />
       </mesh>
     </group>
@@ -51,8 +59,8 @@ function Core() {
   });
   return (
     <mesh ref={mesh}>
-      <icosahedronGeometry args={[0.55, 1]} />
-      <meshStandardMaterial color="#7C5CFF" emissive="#7C5CFF" emissiveIntensity={0.5} flatShading metalness={0.6} roughness={0.25} />
+      <icosahedronGeometry args={[0.55, 3]} />
+      <meshStandardMaterial color="#7C5CFF" emissive="#7C5CFF" emissiveIntensity={0.5} metalness={0.6} roughness={0.25} />
     </mesh>
   );
 }
