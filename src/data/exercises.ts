@@ -3,7 +3,10 @@ import { colors } from '../theme';
 export type Muscle =
   | 'shoulders'
   | 'chest'
+  | 'upperChest'
+  | 'lowerChest'
   | 'back'
+  | 'lats'
   | 'biceps'
   | 'triceps'
   | 'forearms'
@@ -16,7 +19,10 @@ export type Muscle =
 export const muscleNames: Record<Muscle, string> = {
   shoulders: 'Дельты',
   chest: 'Грудь',
+  upperChest: 'Верх груди',
+  lowerChest: 'Низ груди',
   back: 'Спина',
+  lats: 'Широчайшие',
   biceps: 'Бицепс',
   triceps: 'Трицепс',
   forearms: 'Предплечья',
@@ -45,7 +51,7 @@ export type Exercise = {
   group: Group;
   primary: Muscle[];
   secondary: Muscle[];
-  equipment: 'Гантели' | 'Без инвентаря' | 'Турник' | 'Скамья и гантели';
+  equipment: 'Гантели' | 'Без инвентаря' | 'Турник' | 'Скамья и гантели' | 'Верхний блок';
   // Metabolic equivalent, used for calorie estimates.
   met: number;
   mode: 'reps' | 'time';
@@ -191,7 +197,7 @@ export const exercises: Exercise[] = [
     id: 'pullup',
     name: 'Подтягивания',
     group: 'back',
-    primary: ['back'],
+    primary: ['lats'],
     secondary: ['biceps', 'forearms'],
     equipment: 'Турник',
     met: 8,
@@ -210,7 +216,7 @@ export const exercises: Exercise[] = [
     id: 'row',
     name: 'Тяга гантелей в наклоне',
     group: 'back',
-    primary: ['back'],
+    primary: ['lats', 'back'],
     secondary: ['biceps', 'shoulders'],
     equipment: 'Гантели',
     met: 5,
@@ -262,6 +268,175 @@ export const exercises: Exercise[] = [
     ],
     mistakes: ['Запрокидывание головы', 'Рывки', 'Задержка дыхания'],
   },
+  {
+    id: 'incline-press',
+    name: 'Жим гантелей на наклонной скамье',
+    group: 'chest',
+    primary: ['upperChest'],
+    secondary: ['shoulders', 'triceps'],
+    equipment: 'Скамья и гантели',
+    met: 5,
+    mode: 'reps',
+    sets: 4,
+    amount: 10,
+    steps: [
+      'Установите спинку скамьи под углом 30–45°.',
+      'Лягте, лопатки сведены, гантели над верхом груди.',
+      'Опустите гантели к верхней части груди, локти под ~45°.',
+      'Выжмите вверх, сводя гантели над грудью.',
+    ],
+    mistakes: ['Слишком крутой угол — работают плечи', 'Отрыв таза', 'Локти под 90° к корпусу'],
+  },
+  {
+    id: 'decline-press',
+    name: 'Жим гантелей на скамье с отрицательным наклоном',
+    group: 'chest',
+    primary: ['lowerChest'],
+    secondary: ['triceps', 'shoulders'],
+    equipment: 'Скамья и гантели',
+    met: 5,
+    mode: 'reps',
+    sets: 3,
+    amount: 10,
+    steps: [
+      'Закрепите ноги под валиками, голова ниже таза (наклон 15–30°).',
+      'Гантели над нижней частью груди.',
+      'Опустите гантели к низу груди и выжмите вверх.',
+    ],
+    mistakes: ['Слишком большой наклон', 'Резкое опускание', 'Без страховки ног'],
+  },
+  {
+    id: 'squeeze-press',
+    name: 'Жим сведёнными гантелями',
+    group: 'chest',
+    primary: ['chest'],
+    secondary: ['triceps'],
+    equipment: 'Скамья и гантели',
+    met: 4.5,
+    mode: 'reps',
+    sets: 3,
+    amount: 12,
+    steps: [
+      'Лягте на скамью, гантели прижаты друг к другу над грудью, ладони смотрят внутрь.',
+      'Сжимайте гантели всё время подхода — это нагружает внутреннюю часть груди.',
+      'Опустите гантели к середине груди, локти вдоль корпуса.',
+      'Выжмите вверх, не разводя гантели.',
+    ],
+    mistakes: ['Гантели расходятся', 'Локти в стороны', 'Слишком тяжёлый вес'],
+  },
+  {
+    id: 'pullover',
+    name: 'Пуловер с гантелью',
+    group: 'chest',
+    primary: ['chest', 'lats'],
+    secondary: ['triceps'],
+    equipment: 'Скамья и гантели',
+    met: 4,
+    mode: 'reps',
+    sets: 3,
+    amount: 12,
+    steps: [
+      'Лягте на скамью, гантель над грудью в обеих руках, локти слегка согнуты.',
+      'Опустите гантель по дуге за голову до растяжения груди и широчайших.',
+      'Верните гантель над грудью тем же путём.',
+    ],
+    mistakes: ['Сгибание локтей как во французском жиме', 'Прогиб поясницы', 'Слишком глубокое опускание'],
+  },
+  {
+    id: 'z-press',
+    name: 'Жим гантелей сидя на полу',
+    group: 'shoulders',
+    primary: ['shoulders'],
+    secondary: ['triceps', 'abs'],
+    equipment: 'Гантели',
+    met: 5,
+    mode: 'reps',
+    sets: 3,
+    amount: 10,
+    steps: [
+      'Сядьте на пол, ноги прямые, спина вертикально без опоры.',
+      'Гантели у плеч, пресс напряжён.',
+      'Выжмите гантели над головой, не отклоняясь назад.',
+      'Медленно опустите к плечам.',
+    ],
+    mistakes: ['Отклонение корпуса назад', 'Круглая спина', 'Сгибание ног'],
+  },
+  {
+    id: 'lat-pulldown',
+    name: 'Тяга верхнего блока широким хватом',
+    group: 'back',
+    primary: ['lats'],
+    secondary: ['biceps', 'back'],
+    equipment: 'Верхний блок',
+    met: 5,
+    mode: 'reps',
+    sets: 4,
+    amount: 12,
+    steps: [
+      'Сядьте, зафиксируйте бёдра под валиком, возьмитесь за гриф широким хватом.',
+      'Слегка отклонитесь назад, грудь вперёд.',
+      'Тяните гриф к верху груди, сводя лопатки и ведя локти вниз.',
+      'Медленно верните руки вверх до полного растяжения.',
+    ],
+    mistakes: ['Тяга руками без лопаток', 'Сильное раскачивание корпусом', 'Гриф за голову с округлением шеи'],
+  },
+  {
+    id: 'lat-pulldown-behind',
+    name: 'Тяга верхнего блока за голову',
+    group: 'back',
+    primary: ['lats'],
+    secondary: ['back', 'shoulders'],
+    equipment: 'Верхний блок',
+    met: 5,
+    mode: 'reps',
+    sets: 3,
+    amount: 10,
+    steps: [
+      'Возьмите гриф широким хватом, слегка наклоните голову вперёд.',
+      'Тяните гриф к основанию шеи, разводя локти в стороны.',
+      'Вернитесь вверх подконтрольно.',
+      'Выполняйте только при хорошей подвижности плеч.',
+    ],
+    mistakes: ['Удар грифом по шее', 'Большой вес', 'Сутулость'],
+  },
+  {
+    id: 'close-grip-pulldown',
+    name: 'Тяга верхнего блока узким хватом',
+    group: 'back',
+    primary: ['lats'],
+    secondary: ['biceps', 'back'],
+    equipment: 'Верхний блок',
+    met: 5,
+    mode: 'reps',
+    sets: 3,
+    amount: 12,
+    steps: [
+      'Возьмитесь за V-рукоять, ладони смотрят друг на друга.',
+      'Отклонитесь назад на 15–20°.',
+      'Тяните рукоять к низу груди, локти вдоль корпуса.',
+      'Медленно выпрямите руки.',
+    ],
+    mistakes: ['Большой отклон назад', 'Рывки', 'Неполная амплитуда'],
+  },
+  {
+    id: 'reverse-pulldown',
+    name: 'Тяга верхнего блока обратным хватом',
+    group: 'back',
+    primary: ['lats'],
+    secondary: ['biceps'],
+    equipment: 'Верхний блок',
+    met: 5,
+    mode: 'reps',
+    sets: 3,
+    amount: 12,
+    steps: [
+      'Возьмите гриф хватом снизу на ширине плеч.',
+      'Тяните гриф к груди, ведя локти вниз и вперёд.',
+      'Сведите лопатки внизу и плавно вернитесь.',
+    ],
+    mistakes: ['Тяга только бицепсом', 'Отрыв бёдер', 'Слишком широкий хват'],
+  },
+
   {
     id: 'biceps-curl',
     name: 'Сгибания на бицепс',
@@ -503,6 +678,27 @@ export const programs: Program[] = [
     subtitle: '4 упр. · 35 мин',
     color: '#FF7A45',
     exerciseIds: ['overhead-press', 'front-raise', 'lateral-raise', 'rear-delt-fly'],
+  },
+  {
+    id: 'chest-day',
+    title: 'Грудь: все отделы',
+    subtitle: '4 упр. · 40 мин',
+    color: '#FF4F7B',
+    exerciseIds: ['decline-press', 'incline-press', 'bench-press', 'squeeze-press'],
+  },
+  {
+    id: 'lats-day',
+    title: 'Широкая спина',
+    subtitle: '4 упр. · 35 мин',
+    color: '#8B6CFF',
+    exerciseIds: ['lat-pulldown-behind', 'close-grip-pulldown', 'reverse-pulldown', 'lat-pulldown'],
+  },
+  {
+    id: 'dumbbell-mix',
+    title: 'Гантели: верх',
+    subtitle: '4 упр. · 30 мин',
+    color: '#FFC845',
+    exerciseIds: ['pullover', 'triceps-extension', 'z-press', 'rear-delt-fly'],
   },
   {
     id: 'upper',

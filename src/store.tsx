@@ -10,6 +10,8 @@ export type LogEntry = {
   minutes: number;
   kcal: number;
   details: string;
+  // Set for library exercises so the body map can light up the trained muscles.
+  exerciseId?: string;
 };
 
 type Store = {

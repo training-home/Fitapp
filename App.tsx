@@ -14,7 +14,7 @@ import { StoreProvider } from './src/store';
 import { colors, radius, spacing } from './src/theme';
 
 const tabs: { key: string; label: string; icon: IconName }[] = [
-  { key: 'today', label: 'Сегодня', icon: 'rings' },
+  { key: 'today', label: 'Главная', icon: 'home' },
   { key: 'library', label: 'Упражнения', icon: 'dumbbell' },
   { key: 'timers', label: 'Таймеры', icon: 'timer' },
   { key: 'progress', label: 'Прогресс', icon: 'chart' },
@@ -30,7 +30,7 @@ export default function App() {
         <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
           <StatusBar style="light" />
           <View style={styles.screen}>
-            {tab === 'today' && <TodayScreen />}
+            {tab === 'today' && <TodayScreen onNavigate={setTab} />}
             {tab === 'library' && <LibraryScreen onOpen={setExercise} />}
             {tab === 'timers' && <TimersScreen />}
             {tab === 'progress' && <ProgressScreen />}

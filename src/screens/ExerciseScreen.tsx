@@ -45,7 +45,7 @@ export function ExerciseScreen({ exercise, onClose }: { exercise: Exercise; onCl
     const minutes = Math.max(actual, minimum);
     const kcal = kcalFor(exercise.met, weightKg, minutes);
     const details = `${sets} × ${amount}${timed ? ' с' : ''}${usesWeights ? ` · ${load} кг` : ''} · ${minutes.toFixed(1)} мин`;
-    addEntry({ title: exercise.name, kind: 'strength', minutes: Math.round(minutes * 10) / 10, kcal, details });
+    addEntry({ title: exercise.name, kind: 'strength', minutes: Math.round(minutes * 10) / 10, kcal, details, exerciseId: exercise.id });
     setResult({ kcal, minutes, sets });
     setPhase('done');
     haptic.success();

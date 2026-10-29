@@ -1,7 +1,8 @@
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 
 export type IconName =
-  | 'rings'
+  | 'home'
+  | 'body'
   | 'dumbbell'
   | 'timer'
   | 'chart'
@@ -23,10 +24,11 @@ export function Icon({ name, size = 22, color = '#fff', strokeWidth = 2 }: { nam
   const p = { stroke: color, strokeWidth, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, fill: 'none' };
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24">
-      {name === 'rings' && (
+      {name === 'home' && <Path d="M4 10.5L12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" {...p} />}
+      {name === 'body' && (
         <>
-          <Circle cx={12} cy={12} r={9} {...p} />
-          <Circle cx={12} cy={12} r={5} {...p} />
+          <Circle cx={12} cy={4.5} r={2} {...p} />
+          <Path d="M6 8.5l6 1.2 6-1.2M12 9.7V14m0 0l-3 7m3-7l3 7" {...p} />
         </>
       )}
       {name === 'dumbbell' && (

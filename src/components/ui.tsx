@@ -22,11 +22,11 @@ export function Card({ children, style, glow }: { children: ReactNode; style?: S
 }
 
 // Pressable that shrinks slightly while held, for a soft tactile feel.
-export function Tap({ onPress, style, children, disabled, label }: { onPress?: () => void; style?: StyleProp<ViewStyle>; children: ReactNode; disabled?: boolean; label?: string }) {
+export function Tap({ onPress, style, children, disabled, label, grow }: { onPress?: () => void; style?: StyleProp<ViewStyle>; children: ReactNode; disabled?: boolean; label?: string; grow?: boolean }) {
   const [scale] = useState(() => new Animated.Value(1));
   const to = (v: number) => Animated.spring(scale, { toValue: v, useNativeDriver: true, speed: 40, bounciness: 6 }).start();
   return (
-    <Pressable onPress={onPress} onPressIn={() => to(0.96)} onPressOut={() => to(1)} disabled={disabled} accessibilityRole="button" accessibilityLabel={label}>
+    <Pressable onPress={onPress} onPressIn={() => to(0.96)} onPressOut={() => to(1)} disabled={disabled} accessibilityRole="button" accessibilityLabel={label} style={grow ? { flex: 1 } : undefined}>
       <Animated.View style={[style, { transform: [{ scale }] }, disabled && { opacity: 0.4 }]}>{children}</Animated.View>
     </Pressable>
   );

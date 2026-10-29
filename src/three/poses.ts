@@ -17,7 +17,7 @@ export type Pose = {
   tiptoe?: number;
 };
 
-export type Prop = 'seat' | 'bench' | 'bar' | 'mat';
+export type Prop = 'seat' | 'stool' | 'bench' | 'incline' | 'decline' | 'cable' | 'bar' | 'mat';
 
 export type Animation = {
   a: Pose;
@@ -69,6 +69,32 @@ const onBench = (extra: Partial<Record<JointKey, Vec3>>): Pose => ({
 
 const lyingKneesBent = legs([-1.0, 0, 0.08], [2.2, 0, 0]);
 
+// Incline bench: torso raised 0.6 rad above horizontal, thighs level, feet on the floor.
+const INCLINE = 0.6;
+const onIncline = (extra: Partial<Record<JointKey, Vec3>>): Pose => ({
+  rootRx: -(PI / 2 - INCLINE),
+  rootY: GROUND + 0.93,
+  joints: { ...legs([-0.6, 0, 0.15], [1.57, 0, 0]), ...extra },
+});
+
+// Decline bench: head 0.35 rad below the hips, knees hooked over the roller.
+const onDecline = (extra: Partial<Record<JointKey, Vec3>>): Pose => ({
+  rootRx: -PI / 2 - 0.35,
+  rootY: -0.75,
+  joints: { ...legs([0, 0, 0.12], [1.4, 0, 0]), ...extra },
+});
+
+// Sitting on the floor with straight legs.
+const floorSit = (extra: Partial<Record<JointKey, Vec3>>): Pose => ({
+  rootY: GROUND + 0.22,
+  joints: { ...legs([-1.57, 0, 0.08]), ...extra },
+});
+
+const pulldown = (spine: number, extra: Partial<Record<JointKey, Vec3>>): Pose => ({ ...seated(extra), spine });
+
+const pressBottom = arms([-1.5, 0, 1.4], [0, 0, -1.4]);
+const pressTop = arms([-1.5, 0, 0.05], [0, 0, 0]);
+
 export const animations: Record<string, Animation> = {
   'overhead-press': {
     a: seated(arms([0, 0, 1.45], [0, 0, 1.65])),
@@ -95,9 +121,14 @@ export const animations: Record<string, Animation> = {
     period: 2.6,
     dumbbells: true,
   },
+  idle: {
+    a: standing(arms([0, 0, 0.14], [-0.15, 0, 0.05])),
+    b: standing(arms([0, 0, 0.17], [-0.2, 0, 0.05])),
+    period: 4,
+  },
   'bench-press': {
-    a: onBench(arms([-1.5, 0, 1.4], [0, 0, -1.4])),
-    b: onBench(arms([-1.5, 0, 0.05], [0, 0, 0])),
+    a: onBench(pressBottom),
+    b: onBench(pressTop),
     period: 2.6,
     props: ['bench'],
     dumbbells: true,
@@ -108,6 +139,65 @@ export const animations: Record<string, Animation> = {
     period: 3,
     props: ['bench'],
     dumbbells: true,
+  },
+  'incline-press': {
+    a: onIncline(pressBottom),
+    b: onIncline(pressTop),
+    period: 2.6,
+    props: ['incline'],
+    dumbbells: true,
+  },
+  'decline-press': {
+    a: onDecline(pressBottom),
+    b: onDecline(pressTop),
+    period: 2.6,
+    props: ['decline'],
+    dumbbells: true,
+  },
+  'squeeze-press': {
+    a: onBench(arms([-1.5, 0, 0.02])),
+    b: onBench(arms([0.8, 0, 0.35], [-2.33, 0, 0.25])),
+    period: 2.6,
+    props: ['bench'],
+    dumbbells: true,
+  },
+  pullover: {
+    a: onBench(arms([-1.5, 0, 0.05], [-0.2, 0, 0])),
+    b: onBench(arms([-2.9, 0, 0.05], [-0.3, 0, 0])),
+    period: 3,
+    props: ['bench'],
+    dumbbells: true,
+  },
+  'z-press': {
+    a: floorSit(arms([0, 0, 1.45], [0, 0, 1.65])),
+    b: floorSit(arms([0, 0, 2.75], [0, 0, 0.3])),
+    period: 2.6,
+    props: ['mat'],
+    dumbbells: true,
+  },
+  'lat-pulldown': {
+    a: pulldown(-0.15, arms([0, 0, 2.75], [0, 0, 0.1])),
+    b: pulldown(-0.3, arms([0, 0, 1.25], [0, 0, 1.85])),
+    period: 2.6,
+    props: ['stool', 'cable'],
+  },
+  'lat-pulldown-behind': {
+    a: pulldown(0.15, arms([0.15, 0, 2.75], [0, 0, 0.1])),
+    b: pulldown(0.2, arms([0.45, 0, 1.35], [0, 0, 1.75])),
+    period: 2.6,
+    props: ['stool', 'cable'],
+  },
+  'close-grip-pulldown': {
+    a: pulldown(-0.1, arms([-2.9, 0, 0.1])),
+    b: pulldown(-0.3, arms([-0.35, 0, 0.12], [-2.0, 0, 0])),
+    period: 2.6,
+    props: ['stool', 'cable'],
+  },
+  'reverse-pulldown': {
+    a: pulldown(-0.15, arms([-2.85, 0, 0.22])),
+    b: pulldown(-0.25, arms([-0.45, 0, 0.25], [-2.0, 0, 0])),
+    period: 2.6,
+    props: ['stool', 'cable'],
   },
   pushup: {
     a: { ...plank(0.48), joints: { ...arms([-1.09, 0, 0.05]), ...legs([0, 0, 0.04]) } },
